@@ -7,7 +7,29 @@
 import type { MakeTuyauRequest, MakeTuyauResponse } from '@tuyau/utils/types'
 import type { InferInput } from '@vinejs/vine/types'
 
+type ApiSessionPost = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['store'], false>
+}
+type ApiSessionDelete = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['destroy'], false>
+}
+type ApiSessionGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['me'], false>
+}
 export interface ApiDefinition {
+  'api': {
+    'session': {
+      '$url': {
+      };
+      '$post': ApiSessionPost;
+      '$delete': ApiSessionDelete;
+      '$get': ApiSessionGetHead;
+      '$head': ApiSessionGetHead;
+    };
+  };
 }
 const routes = [
 ] as const;

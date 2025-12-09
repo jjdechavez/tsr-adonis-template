@@ -8,9 +8,22 @@
 */
 
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
 
-router.get('/', async () => {
-  return {
-    hello: 'world',
-  }
-})
+const SessionController = () => import('#controllers/session_controller')
+const HealthChecksController = () => import('#controllers/health_checks_controller')
+
+router.get('/health', [HealthChecksController])
+router.post('/api/session', [SessionController, 'store'])
+
+router
+  .group(() => {
+    router
+      .group(() => {
+        router.delete('/', [SessionController, 'destroy'])
+        router.get('/', [SessionController, 'me'])
+      })
+      .prefix('/session')
+  })
+  .prefix('/api')
+  .middleware([middleware.auth({ guards: ['api'] })])
