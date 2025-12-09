@@ -125,6 +125,9 @@ importers:
       '@tanstack/router-plugin':
         specifier: ^1.132.0
         version: 1.140.0(@tanstack/react-router@1.140.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(vite@7.2.7(@types/node@22.19.2)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))
+      '@tuyau/client':
+        specifier: ^0.2.10
+        version: 0.2.10
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -140,6 +143,9 @@ importers:
       react-dom:
         specifier: ^19.2.0
         version: 19.2.1(react@19.2.1)
+      server:
+        specifier: workspace:*
+        version: link:../server
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.4.0
@@ -1717,6 +1723,9 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
+  '@tuyau/client@0.2.10':
+    resolution: {integrity: sha512-sVp4JX9uvvV3BSPgZNogJWYp0oleqi2Zy0gyBLFjFz6KWtTVPqNKBA74n0UsnaeZB8y3xxXkYSeWf19z+7yhmg==}
+
   '@tuyau/core@0.4.2':
     resolution: {integrity: sha512-thobRIBW+fQGt9gXQ9zdvhVUyZE5qLZorBeDqxJ2SF07igZAqm0+fyvMTQbOH/vIcpwK2ob9ev3bBhqW4E2hWw==}
     engines: {node: '>=20.6.0'}
@@ -3070,6 +3079,10 @@ packages:
       tedious:
         optional: true
 
+  ky@1.14.1:
+    resolution: {integrity: sha512-hYje4L9JCmpEQBtudo+v52X5X8tgWXUYyPcxKSuxQNboqufecl9VMWjGiucAFH060AwPXHZuH+WB2rrqfkmafw==}
+    engines: {node: '>=18'}
+
   launch-editor@2.12.0:
     resolution: {integrity: sha512-giOHXoOtifjdHqUamwKq6c49GzBdLjvxrd2D+Q4V6uOHopJv7p9VJxikDsQ/CBXZbEITgUqSVHXLTG3VhPP1Dg==}
 
@@ -3316,6 +3329,9 @@ packages:
   object-inspect@1.13.4:
     resolution: {integrity: sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==}
     engines: {node: '>= 0.4'}
+
+  object-to-formdata@4.5.1:
+    resolution: {integrity: sha512-QiM9D0NiU5jV6J6tjE1g7b4Z2tcUnKs1OPUi4iMb2zH+7jwlcUrASghgkFk9GtzqNNq8rTQJtT8AzjBAvLoNMw==}
 
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
@@ -5856,6 +5872,12 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
+  '@tuyau/client@0.2.10':
+    dependencies:
+      '@tuyau/utils': 0.0.9
+      ky: 1.14.1
+      object-to-formdata: 4.5.1
+
   '@tuyau/core@0.4.2(@adonisjs/core@6.19.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))':
     dependencies:
       '@adonisjs/core': 6.19.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
@@ -7223,6 +7245,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  ky@1.14.1: {}
+
   launch-editor@2.12.0:
     dependencies:
       picocolors: 1.1.1
@@ -7407,6 +7431,8 @@ snapshots:
       unicorn-magic: 0.3.0
 
   object-inspect@1.13.4: {}
+
+  object-to-formdata@4.5.1: {}
 
   on-exit-leak-free@2.1.2: {}
 
