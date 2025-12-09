@@ -85,3 +85,19 @@ function updateJson(filePath, updateFn) {
     fs.writeFileSync(fullPath, JSON.stringify(content, null, 2));
   }
 }
+
+function updateFileContent(filePath, updateFn) {
+  const fullPath = path.resolve(process.cwd(), filePath);
+  if (fs.existsSync(fullPath)) {
+    try {
+      const content = fs.readFileSync(fullPath, "utf8");
+      const newContent = updateFn(content);
+      fs.writeFileSync(fullPath, newContent);
+      console.log(`   Updated ${filePath}`);
+    } catch (error) {
+      console.error(`   ❌ Error updating ${filePath}:`, error.message);
+    }
+  } else {
+    console.error(`   ❌ File not found: ${filePath}`);
+  }
+}
