@@ -7,6 +7,13 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+const appPaths = {
+  serverPkg: "apps/server/package.json",
+  webPkg: "apps/web/package.json",
+  rootPkg: "package.json",
+  tuyauClient: "apps/web/src/lib/tuyau.ts",
+};
+
 const question = (query) =>
   new Promise((resolve) => rl.question(query, resolve));
 
@@ -21,24 +28,47 @@ const question = (query) =>
   const fullServerName = `${scopeName}/server`;
   const fullWebName = `${scopeName}/web`;
 
-  updateJson("apps/server/package.json", (json) => {
+  console.log(
+    `\n⚙️  Configuring packages as: ${fullServerName} & ${fullWebName}...`,
+  );
+
+  updateJson(appPaths.serverPkg, (json) => {
     json.name = fullServerName;
   });
 
-  updateJson("apps/web/package.json", (json) => {
+  updateJson(appPaths.webPkg, (json) => {
     json.name = fullWebName;
     if (json.dependencies) {
       // Remove old ref and add new one
-      const oldKeys = Object.keys(json.dependencies).filter((k) =>
-        k.includes("/server"),
+      const oldKeys = Object.keys(json.dependencies).filter(
+        (k) => k.includes("/server") || k.includes("server"),
       );
       oldKeys.forEach((k) => delete json.dependencies[k]);
       json.dependencies[fullServerName] = "workspace:*";
     }
   });
 
-  updateJson("package.json", (json) => {
+  updateJson(appPaths.rootPkg, (json) => {
     json.name = projectName;
+  });
+
+  updateFileContent(appPaths.tuyauClient, (content) => {
+    // Regex explanation:
+    // Matches: import { api } from 'ANY_STRING/api'
+    // Replaces with: import { api } from '@new-scope/server/api'
+    const importRegex = /import\s+\{\s*api\s*\}\s+from\s+['"](.*)\/api['"]/g;
+
+    if (!importRegex.test(content)) {
+      console.warn(
+        `⚠️  Warning: Could not find "import { api }..." in ${appPaths.tuyauClient}`,
+      );
+      return content;
+    }
+
+    return content.replace(
+      importRegex,
+      `import { api } from '${fullServerName}/api'`,
+    );
   });
 
   console.log(`\n✅ Renamed packages to ${fullServerName} and ${fullWebName}`);
