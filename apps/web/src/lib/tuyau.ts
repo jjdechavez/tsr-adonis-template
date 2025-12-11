@@ -1,5 +1,6 @@
 import { createTuyau } from '@tuyau/client'
 import { api } from 'server/api'
+import { getAuthToken } from './auth'
 
 export const tuyau = createTuyau({
   api,
@@ -7,11 +8,11 @@ export const tuyau = createTuyau({
   timeout: 10_000,
   hooks: {
     beforeRequest: [
-      (_request) => {
-        // const token = getToken()
-        // if (token) {
-        //   request.headers.set('Authorization', `Bearer ${token}`)
-        // }
+      (request) => {
+        const token = getAuthToken()
+        if (token) {
+          request.headers.set('Authorization', `Bearer ${token}`)
+        }
       },
     ],
   },

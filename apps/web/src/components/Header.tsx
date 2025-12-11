@@ -1,10 +1,18 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 import { useState } from 'react'
-import { Home, Menu, Network, Table, X } from 'lucide-react'
+import { Home, Menu, Network, Table, X, LogOut, LogIn } from 'lucide-react'
+import { useAuth } from '../lib/auth'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { isAuthenticated, user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await logout()
+    navigate({ to: '/login' })
+  }
 
   return (
     <>
@@ -86,6 +94,51 @@ export default function Header() {
           </Link>
 
           {/* Demo Links End */}
+
+          {/* Auth Links */}
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+                activeProps={{
+                  className:
+                    'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+                }}
+              >
+                <span className="font-medium">Dashboard</span>
+              </Link>
+              <div className="border-t border-gray-700 my-2 pt-2">
+                <div className="px-3 py-2 text-sm text-gray-400">
+                  {user?.firstName} {user?.lastName}
+                </div>
+                <button
+                  onClick={() => {
+                    setIsOpen(false)
+                    handleLogout()
+                  }}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors w-full text-left"
+                >
+                  <LogOut size={20} />
+                  <span className="font-medium">Logout</span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+              activeProps={{
+                className:
+                  'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              }}
+            >
+              <LogIn size={20} />
+              <span className="font-medium">Login</span>
+            </Link>
+          )}
         </nav>
       </aside>
     </>

@@ -12,6 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as appDashboardRouteImport } from './routes/(app)/dashboard'
+import { Route as appAuthenticatedRouteImport } from './routes/(app)/_authenticated'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +31,69 @@ const DemoTableRoute = DemoTableRouteImport.update({
   path: '/demo/table',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const appDashboardRoute = appDashboardRouteImport.update({
+  id: '/(app)/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const appAuthenticatedRoute = appAuthenticatedRouteImport.update({
+  id: '/(app)/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof appDashboardRoute
+  '/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof appDashboardRoute
+  '/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/(app)/_authenticated': typeof appAuthenticatedRoute
+  '/(app)/dashboard': typeof appDashboardRoute
+  '/(auth)/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/table' | '/demo/tanstack-query'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/demo/table'
+    | '/demo/tanstack-query'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/table' | '/demo/tanstack-query'
-  id: '__root__' | '/' | '/demo/table' | '/demo/tanstack-query'
+  to: '/' | '/dashboard' | '/login' | '/demo/table' | '/demo/tanstack-query'
+  id:
+    | '__root__'
+    | '/'
+    | '/(app)/_authenticated'
+    | '/(app)/dashboard'
+    | '/(auth)/login'
+    | '/demo/table'
+    | '/demo/tanstack-query'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  appAuthenticatedRoute: typeof appAuthenticatedRoute
+  appDashboardRoute: typeof appDashboardRoute
+  authLoginRoute: typeof authLoginRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
@@ -82,11 +121,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTableRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(app)/dashboard': {
+      id: '/(app)/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof appDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(app)/_authenticated': {
+      id: '/(app)/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof appAuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  appAuthenticatedRoute: appAuthenticatedRoute,
+  appDashboardRoute: appDashboardRoute,
+  authLoginRoute: authLoginRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
