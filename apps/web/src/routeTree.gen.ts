@@ -9,13 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as appDashboardRouteImport } from './routes/(app)/dashboard'
-import { Route as appAuthenticatedRouteImport } from './routes/(app)/_authenticated'
 
+const appRouteRoute = appRouteRouteImport.update({
+  id: '/(app)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,13 +41,9 @@ const authLoginRoute = authLoginRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const appDashboardRoute = appDashboardRouteImport.update({
-  id: '/(app)/dashboard',
+  id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const appAuthenticatedRoute = appAuthenticatedRouteImport.update({
-  id: '/(app)/_authenticated',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => appRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -63,7 +63,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/(app)/_authenticated': typeof appAuthenticatedRoute
+  '/(app)': typeof appRouteRouteWithChildren
   '/(app)/dashboard': typeof appDashboardRoute
   '/(auth)/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
@@ -82,7 +82,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/(app)/_authenticated'
+    | '/(app)'
     | '/(app)/dashboard'
     | '/(auth)/login'
     | '/demo/table'
@@ -91,8 +91,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  appAuthenticatedRoute: typeof appAuthenticatedRoute
-  appDashboardRoute: typeof appDashboardRoute
+  appRouteRoute: typeof appRouteRouteWithChildren
   authLoginRoute: typeof authLoginRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
@@ -100,6 +99,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/(app)': {
+      id: '/(app)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof appRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -133,22 +139,26 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof appDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(app)/_authenticated': {
-      id: '/(app)/_authenticated'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof appAuthenticatedRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof appRouteRoute
     }
   }
 }
 
+interface appRouteRouteChildren {
+  appDashboardRoute: typeof appDashboardRoute
+}
+
+const appRouteRouteChildren: appRouteRouteChildren = {
+  appDashboardRoute: appDashboardRoute,
+}
+
+const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
+  appRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  appAuthenticatedRoute: appAuthenticatedRoute,
-  appDashboardRoute: appDashboardRoute,
+  appRouteRoute: appRouteRouteWithChildren,
   authLoginRoute: authLoginRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,

@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import {
@@ -28,7 +28,7 @@ export const Route = createFileRoute('/(auth)/login')({
 
 function LoginComponent() {
   const navigate = useNavigate()
-  const { login, isAuthenticated } = useAuth()
+  const { login } = useAuth()
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -38,12 +38,6 @@ function LoginComponent() {
   })
 
   const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-
-  if (isAuthenticated) {
-    navigate({ to: '/dashboard' })
-    return null
-  }
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
@@ -51,8 +45,6 @@ function LoginComponent() {
       navigate({ to: '/dashboard' })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
-    } finally {
-      setIsLoading(false)
     }
   }
 

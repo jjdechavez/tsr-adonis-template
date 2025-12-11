@@ -1,7 +1,7 @@
 import Header from '@/components/Header'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/(app)/_authenticated')({
+export const Route = createFileRoute('/(app)')({
   beforeLoad: ({ context, location }) => {
     const { auth } = context
 
@@ -21,9 +21,7 @@ function AuthenticatedLayout() {
   return (
     <>
       <Header />
-      <div className="min-h-screen">
-        <Outlet />
-      </div>
+      <Outlet />{' '}
     </>
   )
 }
