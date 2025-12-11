@@ -7,9 +7,13 @@
 import type { MakeTuyauRequest, MakeTuyauResponse } from '@tuyau/utils/types'
 import type { InferInput } from '@vinejs/vine/types'
 
-type ApiSessionPost = {
+type HealthGetHead = {
   request: unknown
-  response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['store'], false>
+  response: MakeTuyauResponse<import('../app/controllers/health_checks_controller.ts').default['handle'], false>
+}
+type ApiSessionPost = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/session.ts')['sessionStoreValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['store'], true>
 }
 type ApiSessionDelete = {
   request: unknown
@@ -20,6 +24,12 @@ type ApiSessionGetHead = {
   response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['me'], false>
 }
 export interface ApiDefinition {
+  'health': {
+    '$url': {
+    };
+    '$get': HealthGetHead;
+    '$head': HealthGetHead;
+  };
   'api': {
     'session': {
       '$url': {

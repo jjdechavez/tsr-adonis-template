@@ -1,9 +1,10 @@
 import User from '#models/user'
+import { sessionStoreValidator } from '#validators/session'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SessionsController {
   async store({ request, auth }: HttpContext) {
-    const { email, password } = request.only(['email', 'password'])
+    const { email, password } = await request.validateUsing(sessionStoreValidator)
 
     const user = await User.verifyCredentials(email, password)
     return await auth.use('api').createToken(user, ['*'], { expiresIn: '7 days' })
