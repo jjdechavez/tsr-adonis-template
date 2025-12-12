@@ -1,3 +1,4 @@
+import { UserDto } from '#dto/user'
 import User from '#models/user'
 import { sessionStoreValidator } from '#validators/session'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -16,6 +17,6 @@ export default class SessionsController {
 
   async me({ auth }: HttpContext) {
     await auth.check()
-    return auth.user
+    return new UserDto(auth.user!).toJson()
   }
 }
