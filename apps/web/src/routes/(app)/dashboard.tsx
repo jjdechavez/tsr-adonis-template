@@ -3,6 +3,9 @@ import { useAuth } from '../../lib/auth'
 
 export const Route = createFileRoute('/(app)/dashboard')({
   component: DashboardComponent,
+  loader: () => ({
+    crumb: 'Dashboard',
+  }),
 })
 
 function DashboardComponent() {

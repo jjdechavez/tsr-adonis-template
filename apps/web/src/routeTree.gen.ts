@@ -15,6 +15,9 @@ import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-qu
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as appDashboardRouteImport } from './routes/(app)/dashboard'
+import { Route as appSettingsRouteRouteImport } from './routes/(app)/settings/route'
+import { Route as appSettingsIndexRouteImport } from './routes/(app)/settings/index'
+import { Route as appSettingsUsersRouteImport } from './routes/(app)/settings/users'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
@@ -45,13 +48,31 @@ const appDashboardRoute = appDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appSettingsRouteRoute = appSettingsRouteRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appSettingsIndexRoute = appSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => appSettingsRouteRoute,
+} as any)
+const appSettingsUsersRoute = appSettingsUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => appSettingsRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/settings': typeof appSettingsRouteRouteWithChildren
   '/dashboard': typeof appDashboardRoute
   '/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/settings/users': typeof appSettingsUsersRoute
+  '/settings/': typeof appSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,34 +80,52 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/settings/users': typeof appSettingsUsersRoute
+  '/settings': typeof appSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(app)': typeof appRouteRouteWithChildren
+  '/(app)/settings': typeof appSettingsRouteRouteWithChildren
   '/(app)/dashboard': typeof appDashboardRoute
   '/(auth)/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/(app)/settings/users': typeof appSettingsUsersRoute
+  '/(app)/settings/': typeof appSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/settings'
     | '/dashboard'
     | '/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/settings/users'
+    | '/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/demo/table' | '/demo/tanstack-query'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/demo/table'
+    | '/demo/tanstack-query'
+    | '/settings/users'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/(app)'
+    | '/(app)/settings'
     | '/(app)/dashboard'
     | '/(auth)/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/(app)/settings/users'
+    | '/(app)/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -141,14 +180,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appDashboardRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/settings': {
+      id: '/(app)/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof appSettingsRouteRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/settings/': {
+      id: '/(app)/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof appSettingsIndexRouteImport
+      parentRoute: typeof appSettingsRouteRoute
+    }
+    '/(app)/settings/users': {
+      id: '/(app)/settings/users'
+      path: '/users'
+      fullPath: '/settings/users'
+      preLoaderRoute: typeof appSettingsUsersRouteImport
+      parentRoute: typeof appSettingsRouteRoute
+    }
   }
 }
 
+interface appSettingsRouteRouteChildren {
+  appSettingsUsersRoute: typeof appSettingsUsersRoute
+  appSettingsIndexRoute: typeof appSettingsIndexRoute
+}
+
+const appSettingsRouteRouteChildren: appSettingsRouteRouteChildren = {
+  appSettingsUsersRoute: appSettingsUsersRoute,
+  appSettingsIndexRoute: appSettingsIndexRoute,
+}
+
+const appSettingsRouteRouteWithChildren =
+  appSettingsRouteRoute._addFileChildren(appSettingsRouteRouteChildren)
+
 interface appRouteRouteChildren {
+  appSettingsRouteRoute: typeof appSettingsRouteRouteWithChildren
   appDashboardRoute: typeof appDashboardRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
+  appSettingsRouteRoute: appSettingsRouteRouteWithChildren,
   appDashboardRoute: appDashboardRoute,
 }
 

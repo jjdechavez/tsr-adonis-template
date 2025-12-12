@@ -48,7 +48,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const checkAuth = async () => {
-    console.log("checkAuth")
     const token = getToken()
     if (!token) {
       setUser(null)

@@ -6,7 +6,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      tsr-adonis-template:
+        specifier: 'link:'
+        version: 'link:'
 
   apps/server:
     dependencies:
