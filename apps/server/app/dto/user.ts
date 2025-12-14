@@ -10,8 +10,8 @@ export class UserDto {
       firstName: this.user.firstName,
       lastName: this.user.lastName,
       email: this.user.email,
-      createdAt: this.user.createdAt,
-      updatedAt: this.user.updatedAt,
+      createdAt: this.user.createdAt.toString(),
+      updatedAt: this.user.updatedAt?.toString(),
     }
   }
 }
