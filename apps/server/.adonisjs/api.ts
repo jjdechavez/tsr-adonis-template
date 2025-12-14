@@ -23,6 +23,14 @@ type ApiSessionGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['me'], false>
 }
+type ApiUsersGetHead = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/user.ts')['userListValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/users_controller.ts').default['index'], true>
+}
+type ApiUsersIdPut = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/user.ts')['updateUserValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/users_controller.ts').default['update'], true>
+}
 export interface ApiDefinition {
   'health': {
     '$url': {
@@ -38,6 +46,17 @@ export interface ApiDefinition {
       '$delete': ApiSessionDelete;
       '$get': ApiSessionGetHead;
       '$head': ApiSessionGetHead;
+    };
+    'users': {
+      '$url': {
+      };
+      '$get': ApiUsersGetHead;
+      '$head': ApiUsersGetHead;
+      ':id': {
+        '$url': {
+        };
+        '$put': ApiUsersIdPut;
+      };
     };
   };
 }

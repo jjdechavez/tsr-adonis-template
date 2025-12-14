@@ -1,6 +1,6 @@
 import { useUsers } from '@/hooks/api/user'
 import { useFilters } from '@/hooks/use-filters'
-import { DEFAULT_LIST_META, type ListQueryParam } from '@/lib/api'
+import { DEFAULT_LIST_META } from '@/lib/api'
 import { createFileRoute } from '@tanstack/react-router'
 import {
   getCoreRowModel,
@@ -26,9 +26,9 @@ export const Route = createFileRoute('/(app)/settings/users')({
   validateSearch: () => ({}) as Partial<PaginationState>,
 })
 
-type t = InferResponseType<typeof tuyau.api.users.$get>['data'][number]
+type User = InferResponseType<typeof tuyau.api.users.$get>['data'][number]
 
-const columns: ColumnDef<t>[] = [
+const columns: ColumnDef<User>[] = [
   {
     header: 'Name',
     cell: ({ row }) => {
@@ -57,7 +57,7 @@ function UserSettings() {
   const { status, data } = useUsers(query)
 
   const table = useReactTable({
-    data: data?.data ?? [],
+    data: data?.data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
@@ -79,6 +79,9 @@ function UserSettings() {
       )
     },
     enableColumnFilters: false,
+    filterFns: {
+      fuzzy: () => true,
+    },
   })
 
   return (
