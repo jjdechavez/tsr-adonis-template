@@ -22,15 +22,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { useSession } from '@/hooks/session'
+import { useSession } from '@/hooks/api/session'
 
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { data } = useSession()
 
   const user = {
-    name: data?.data?.name,
-    email: data?.data?.email,
+    name: data?.name,
+    email: data?.email,
   }
 
   return (
