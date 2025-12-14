@@ -1,8 +1,11 @@
 import { createTuyau } from '@tuyau/client'
 import { api } from 'server/api'
-import { getAuthToken } from './auth'
+import { createTuyauReactQueryClient } from '@tuyau/react-query'
 
-export const tuyau = createTuyau({
+import { getAuthToken } from './auth'
+import { getContext } from './tanstack-query/root-provider'
+
+export const tuyauClient = createTuyau({
   api,
   baseUrl: 'http://localhost:3333',
   timeout: 10_000,
@@ -16,4 +19,11 @@ export const tuyau = createTuyau({
       },
     ],
   },
+})
+
+const { queryClient } = getContext()
+
+export const tuyau = createTuyauReactQueryClient({
+  client: tuyauClient,
+  queryClient,
 })

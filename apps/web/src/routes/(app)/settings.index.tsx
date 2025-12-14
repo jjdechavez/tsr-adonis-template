@@ -14,6 +14,7 @@ export const Route = createFileRoute('/(app)/settings/')({
 })
 
 function SettingComponent() {
+  Route.fullPath
   return (
     <div className="px-4 lg:px-6 space-y-4">
       <h1 className="font-bold text-xl text-foreground">Settings</h1>

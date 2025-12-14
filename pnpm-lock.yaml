@@ -172,7 +172,7 @@ importers:
         specifier: ^5.84.2
         version: 5.91.1(@tanstack/react-query@5.90.12(react@19.2.1))(react@19.2.1)
       '@tanstack/react-router':
-        specifier: ^1.132.0
+        specifier: ^1.140.0
         version: 1.140.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@tanstack/react-router-devtools':
         specifier: ^1.132.0
@@ -184,8 +184,11 @@ importers:
         specifier: ^1.132.0
         version: 1.140.0(@tanstack/react-router@1.140.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(vite@7.2.7(@types/node@22.19.2)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))
       '@tuyau/client':
-        specifier: ^0.2.10
-        version: 0.2.10
+        specifier: 0.2.11-next.2
+        version: 0.2.11-next.2
+      '@tuyau/react-query':
+        specifier: 0.0.1-next.2
+        version: 0.0.1-next.2(@tanstack/react-query@5.90.12(react@19.2.1))(@tuyau/client@0.2.11-next.2)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -2319,14 +2322,20 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
-  '@tuyau/client@0.2.10':
-    resolution: {integrity: sha512-sVp4JX9uvvV3BSPgZNogJWYp0oleqi2Zy0gyBLFjFz6KWtTVPqNKBA74n0UsnaeZB8y3xxXkYSeWf19z+7yhmg==}
+  '@tuyau/client@0.2.11-next.2':
+    resolution: {integrity: sha512-sTwa/QVFnTHh/NtFmMknPi4ckoOc+ztcTByu8gwUPBuTjaP282g4vymRLaE/GQLRgeRvnF56obs6m/ibqeRd6w==}
 
   '@tuyau/core@0.4.2':
     resolution: {integrity: sha512-thobRIBW+fQGt9gXQ9zdvhVUyZE5qLZorBeDqxJ2SF07igZAqm0+fyvMTQbOH/vIcpwK2ob9ev3bBhqW4E2hWw==}
     engines: {node: '>=20.6.0'}
     peerDependencies:
       '@adonisjs/core': ^6.2.0
+
+  '@tuyau/react-query@0.0.1-next.2':
+    resolution: {integrity: sha512-kBQrmuerzSDlAD0+NvpZ8qmk1cPC0Epxle7lCyUI8eSpm97/y776q+qT8Q/l1cqPGmh7uqzPAgPFewWOWgiSgA==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.74.7
+      '@tuyau/client': ^0.2.11-next.0
 
   '@tuyau/utils@0.0.9':
     resolution: {integrity: sha512-Uirv4CH7d7US5atdKda3mPmg2K0PsYQx2Gab7Xe/PSGdlq/fp4Ia1IWYKRL2Lfx36QAzEuHqrk4WmDxmw1sTVw==}
@@ -7192,7 +7201,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@tuyau/client@0.2.10':
+  '@tuyau/client@0.2.11-next.2':
     dependencies:
       '@tuyau/utils': 0.0.9
       ky: 1.14.1
@@ -7203,6 +7212,12 @@ snapshots:
       '@adonisjs/core': 6.19.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
       '@tuyau/utils': 0.0.9
       ts-morph: 26.0.0
+
+  '@tuyau/react-query@0.0.1-next.2(@tanstack/react-query@5.90.12(react@19.2.1))(@tuyau/client@0.2.11-next.2)':
+    dependencies:
+      '@tanstack/react-query': 5.90.12(react@19.2.1)
+      '@tuyau/client': 0.2.11-next.2
+      '@tuyau/utils': 0.0.9
 
   '@tuyau/utils@0.0.9': {}
 

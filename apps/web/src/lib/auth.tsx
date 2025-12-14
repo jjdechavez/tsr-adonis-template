@@ -5,7 +5,8 @@ import {
   useEffect,
   type ReactNode,
 } from 'react'
-import { tuyau } from './tuyau'
+import { tuyau, tuyauClient } from './tuyau'
+import { useMutation } from '@tanstack/react-query'
 
 export interface User {
   id: number
@@ -33,6 +34,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const loginMutation = useMutation(tuyau.api.session.$post.mutationOptions())
+  const logoutMutation = useMutation(tuyau.api.session.$delete.mutationOptions())
+
   const getToken = (): string | null => {
     if (typeof window === 'undefined') return null
     return localStorage.getItem(TOKEN_STORAGE_KEY)
@@ -56,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const currentUser = await tuyau.api.session.$get({
+      const currentUser = await tuyauClient.api.session.$get({
         headers: {
           Authorization: token,
         },
@@ -71,24 +75,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const login = async (email: string, password: string) => {
-    const response = await tuyau.api.session.$post({
-      email,
-      password,
-    })
+    const response = await loginMutation.mutateAsync({ payload: { email, password }})
 
-    const tokenData = response.data
-
-    if (!tokenData?.token) {
+    if (!response?.token) {
       throw new Error('Invalid response from server: token not found')
     }
 
-    setToken(tokenData.token)
+    setToken(response.token)
     await checkAuth()
   }
 
   const logout = async () => {
     try {
-      await tuyau.api.session.$delete()
+      await logoutMutation.mutateAsync({})
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
