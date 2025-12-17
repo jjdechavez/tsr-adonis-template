@@ -17,6 +17,8 @@ export default class SessionsController {
 
   async me({ auth }: HttpContext) {
     await auth.check()
+    const user = auth.user!
+    await user.load('role')
     return new UserDto(auth.user!).toJson()
   }
 }

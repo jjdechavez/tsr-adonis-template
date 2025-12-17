@@ -12,6 +12,8 @@ export class UserDto {
       email: this.user.email,
       createdAt: this.user.createdAt.toString(),
       updatedAt: this.user.updatedAt?.toString(),
+      roleId: this.user.roleId,
+      role: this.user.role?.name,
     }
   }
 }

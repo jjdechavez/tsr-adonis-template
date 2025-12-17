@@ -9,6 +9,7 @@ export class UserService {
   async paginate(page = 1, limit = 10, qs: Record<string, any>) {
     const search = qs?.s ? qs.s : ''
     const users = await User.query()
+      .preload('role')
       .if(search, (query) => {
         const searchQuery = `%${search}%`
         query

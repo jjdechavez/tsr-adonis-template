@@ -40,11 +40,8 @@ import { toast } from 'sonner'
 
 export const Route = createFileRoute('/(app)/settings/users')({
   component: UserSettings,
-  loader: ({ context }) => {
+  loader: () => {
     return {
-      ...context.queryClient.ensureQueryData(
-        tuyau.api.users.$get.queryOptions(),
-      ),
       crumb: 'Users',
     }
   },
@@ -130,6 +127,10 @@ const columns: ColumnDef<User>[] = [
   {
     header: 'Email',
     accessorKey: 'email',
+  },
+  {
+    header: 'Role',
+    accessorKey: 'role',
   },
   {
     id: 'actions',
