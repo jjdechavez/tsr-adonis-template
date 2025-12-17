@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { createTuyauReactQueryClient } from '@tuyau/react-query'
 
 import * as TanStackQueryProvider from './lib/tanstack-query/root-provider.tsx'
 import { AuthProvider, useAuth } from './lib/auth'
@@ -10,10 +11,17 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
+import { tuyauClient } from './lib/tuyau.ts'
 
 // Create a new router instance
 
 const TanStackQueryProviderContext = TanStackQueryProvider.getContext()
+
+export const tuyau = createTuyauReactQueryClient({
+  client: tuyauClient,
+  queryClient: TanStackQueryProviderContext.queryClient,
+})
+
 const router = createRouter({
   routeTree,
   context: {
