@@ -6,6 +6,7 @@ import TanStackQueryDevtools from '../lib/tanstack-query/devtools'
 import { useAuth } from '../lib/auth'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { Toaster } from '@/components/ui/sonner'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -33,6 +34,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
             TanStackQueryDevtools,
           ]}
         />
+        <Toaster position="bottom-center" />
       </>
     )
   },

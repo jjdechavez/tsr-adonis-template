@@ -1,4 +1,4 @@
-import { tuyau } from '@/lib/tuyau'
+import { tuyau } from '@/main'
 import { useQuery } from '@tanstack/react-query'
 
 export const useSession = () => {

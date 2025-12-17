@@ -5,7 +5,8 @@ import {
   useEffect,
   type ReactNode,
 } from 'react'
-import { tuyau, tuyauClient } from './tuyau'
+import { tuyauClient } from './tuyau'
+import { tuyau } from '../main'
 import { useMutation } from '@tanstack/react-query'
 
 export interface User {
@@ -35,7 +36,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   const loginMutation = useMutation(tuyau.api.session.$post.mutationOptions())
-  const logoutMutation = useMutation(tuyau.api.session.$delete.mutationOptions())
+  const logoutMutation = useMutation(
+    tuyau.api.session.$delete.mutationOptions(),
+  )
 
   const getToken = (): string | null => {
     if (typeof window === 'undefined') return null
@@ -75,7 +78,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const login = async (email: string, password: string) => {
-    const response = await loginMutation.mutateAsync({ payload: { email, password }})
+    const response = await loginMutation.mutateAsync({
+      payload: { email, password },
+    })
 
     if (!response?.token) {
       throw new Error('Invalid response from server: token not found')
