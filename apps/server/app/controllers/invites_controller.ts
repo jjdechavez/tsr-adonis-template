@@ -1,3 +1,5 @@
+import { InviteDto } from '#dto/invite'
+import { PaginateDto } from '#dto/paginate'
 import { InviteService } from '#services/invite_service'
 import env from '#start/env'
 import {
@@ -16,14 +18,19 @@ export default class InvitesController {
   async store({ request, auth, response }: HttpContext) {
     const payload = await request.validateUsing(createInviteValidator)
     const created = await this.inviteService.create({ ...payload, invitedById: auth!.user!.id })
-    return response.created(created)
+    return response.created(new InviteDto(created!).toJson())
   }
 
   async index({ request }: HttpContext) {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
     const qs = request.qs()
-    return await this.inviteService.paginate(page, limit, qs)
+    const invites = await this.inviteService.paginate(page, limit, qs)
+
+    return {
+      data: invites.all().map((invite) => new InviteDto(invite).toJson()),
+      meta: new PaginateDto(invites.getMeta()).metaToJson(),
+    }
   }
 
   generateLink({ params, request }: HttpContext) {
@@ -67,7 +74,7 @@ export default class InvitesController {
       return response.notFound({ message: `Invite not found with ${params.id} ID` })
     }
 
-    return invite.toJSON()
+    return new InviteDto(invite).toJson()
   }
 
   async complete({ request, params, response }: HttpContext) {
@@ -91,6 +98,6 @@ export default class InvitesController {
       return response.notFound({ message: result.message })
     }
 
-    return response.ok(result.data)
+    return response.ok(new InviteDto(result.data).toJson())
   }
 }

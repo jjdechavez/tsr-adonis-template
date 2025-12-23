@@ -21,7 +21,9 @@ export default class Invite extends BaseModel {
   @column()
   declare invitedById: number
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'invitedById',
+  })
   declare invitedBy: BelongsTo<typeof User>
 
   @column()

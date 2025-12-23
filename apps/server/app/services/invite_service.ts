@@ -26,9 +26,10 @@ export class InviteService {
         query.whereIn('status', status)
       })
       .preload('invitedBy')
+      .preload('role')
       .paginate(page, limit)
 
-    return invites.toJSON()
+    return invites
   }
 
   async findById(id: number) {

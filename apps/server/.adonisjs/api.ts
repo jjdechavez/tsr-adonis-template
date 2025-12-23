@@ -15,6 +15,10 @@ type ApiSessionPost = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/session.ts')['sessionStoreValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['store'], true>
 }
+type InvitesIdConfirmGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['confirm'], false>
+}
 type ApiSessionDelete = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['destroy'], false>
@@ -30,6 +34,22 @@ type ApiUsersGetHead = {
 type ApiUsersIdPut = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/user.ts')['updateUserValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/users_controller.ts').default['update'], true>
+}
+type ApiInvitesPost = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/invite.ts')['createInviteValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['store'], true>
+}
+type ApiInvitesGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['index'], false>
+}
+type ApiInvitesIdPut = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/invite.ts')['updateInviteValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['update'], true>
+}
+type ApiInvitesIdGenerateGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['generateLink'], false>
 }
 export interface ApiDefinition {
   'health': {
@@ -58,9 +78,44 @@ export interface ApiDefinition {
         '$put': ApiUsersIdPut;
       };
     };
+    'invites': {
+      '$url': {
+      };
+      '$post': ApiInvitesPost;
+      '$get': ApiInvitesGetHead;
+      '$head': ApiInvitesGetHead;
+      ':id': {
+        '$url': {
+        };
+        '$put': ApiInvitesIdPut;
+        'generate': {
+          '$url': {
+          };
+          '$get': ApiInvitesIdGenerateGetHead;
+          '$head': ApiInvitesIdGenerateGetHead;
+        };
+      };
+    };
+  };
+  'invites': {
+    ':id': {
+      'confirm': {
+        '$url': {
+        };
+        '$get': InvitesIdConfirmGetHead;
+        '$head': InvitesIdConfirmGetHead;
+      };
+    };
   };
 }
 const routes = [
+  {
+    params: ["id"],
+    name: 'invites.confirm',
+    path: '/invites/:id/confirm',
+    method: ["GET","HEAD"],
+    types: {} as InvitesIdConfirmGetHead,
+  },
 ] as const;
 export const api = {
   routes,
