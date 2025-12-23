@@ -37,6 +37,7 @@ import { useForm } from 'react-hook-form'
 import type { User, UserInput } from '@/types/user'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { SettingTab } from '@/components/setting-tab'
 
 export const Route = createFileRoute('/(app)/settings/users')({
   component: UserSettings,
@@ -153,6 +154,17 @@ const columns: ColumnDef<User>[] = [
   },
 ]
 
+export const userSettingTabs = [
+  {
+    href: '/settings/users',
+    label: 'Users',
+  },
+  {
+    href: '/settings/invites',
+    label: 'Invites',
+  },
+]
+
 function UserSettings() {
   const { filters, setFilters } = useFilters(Route.id)
 
@@ -195,7 +207,7 @@ function UserSettings() {
 
   return (
     <div className="px-4 lg:px-6 space-y-4">
-      <h1 className="font-bold text-xl text-foreground">User Settings</h1>
+      <SettingTab tabs={userSettingTabs} />
 
       <DataTable
         columns={columns}

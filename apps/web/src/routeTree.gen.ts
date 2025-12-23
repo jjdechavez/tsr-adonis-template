@@ -18,6 +18,7 @@ import { Route as appSettingsRouteImport } from './routes/(app)/settings'
 import { Route as appDashboardRouteImport } from './routes/(app)/dashboard'
 import { Route as appSettingsIndexRouteImport } from './routes/(app)/settings.index'
 import { Route as appSettingsUsersRouteImport } from './routes/(app)/settings.users'
+import { Route as appSettingsInvitesRouteImport } from './routes/(app)/settings.invites'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
@@ -63,6 +64,11 @@ const appSettingsUsersRoute = appSettingsUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => appSettingsRoute,
 } as any)
+const appSettingsInvitesRoute = appSettingsInvitesRouteImport.update({
+  id: '/invites',
+  path: '/invites',
+  getParentRoute: () => appSettingsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/settings/invites': typeof appSettingsInvitesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings/': typeof appSettingsIndexRoute
 }
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/settings/invites': typeof appSettingsInvitesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings': typeof appSettingsIndexRoute
 }
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/(auth)/login': typeof authLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/(app)/settings/invites': typeof appSettingsInvitesRoute
   '/(app)/settings/users': typeof appSettingsUsersRoute
   '/(app)/settings/': typeof appSettingsIndexRoute
 }
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/settings/invites'
     | '/settings/users'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/settings/invites'
     | '/settings/users'
     | '/settings'
   id:
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/(app)/settings/invites'
     | '/(app)/settings/users'
     | '/(app)/settings/'
   fileRoutesById: FileRoutesById
@@ -201,15 +213,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appSettingsUsersRouteImport
       parentRoute: typeof appSettingsRoute
     }
+    '/(app)/settings/invites': {
+      id: '/(app)/settings/invites'
+      path: '/invites'
+      fullPath: '/settings/invites'
+      preLoaderRoute: typeof appSettingsInvitesRouteImport
+      parentRoute: typeof appSettingsRoute
+    }
   }
 }
 
 interface appSettingsRouteChildren {
+  appSettingsInvitesRoute: typeof appSettingsInvitesRoute
   appSettingsUsersRoute: typeof appSettingsUsersRoute
   appSettingsIndexRoute: typeof appSettingsIndexRoute
 }
 
 const appSettingsRouteChildren: appSettingsRouteChildren = {
+  appSettingsInvitesRoute: appSettingsInvitesRoute,
   appSettingsUsersRoute: appSettingsUsersRoute,
   appSettingsIndexRoute: appSettingsIndexRoute,
 }
