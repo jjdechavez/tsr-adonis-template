@@ -12,7 +12,7 @@ import {
   DataTable,
   DEFAULT_PAGE_INDEX,
   DEFAULT_PAGE_SIZE,
-} from '@/components/simple-data-table'
+} from '@/components/data-table'
 import { useIsMobile } from '@/hooks/use-mobile'
 import {
   Drawer,

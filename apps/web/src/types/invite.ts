@@ -1,6 +1,8 @@
 import type { tuyau } from '@/main'
-import type { InferResponseType } from '@tuyau/react-query'
+import type { InferRequestType, InferResponseType } from '@tuyau/react-query'
 
 export type Invite = InferResponseType<
   typeof tuyau.api.invites.$get
 >['data'][number]
+
+export type InviteInput = InferRequestType<typeof tuyau.api.invites.$post>

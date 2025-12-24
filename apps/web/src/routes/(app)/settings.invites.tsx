@@ -3,7 +3,7 @@ import {
   DataTable,
   DEFAULT_PAGE_INDEX,
   DEFAULT_PAGE_SIZE,
-} from '@/components/simple-data-table'
+} from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -25,6 +25,7 @@ import {
 import { MoreHorizontal } from 'lucide-react'
 import { userSettingTabs } from './settings.users'
 import { DEFAULT_LIST_META } from '@/lib/api'
+import { CreateInvite } from '@/components/setting-invite-overlay'
 
 export const Route = createFileRoute('/(app)/settings/invites')({
   component: InviteSettings,
@@ -109,7 +110,10 @@ function InviteSettings() {
 
   return (
     <div className="px-4 lg:px-6 space-y-4">
-      <SettingTab tabs={userSettingTabs} />
+      <div className="flex items-center justify-between">
+        <SettingTab tabs={userSettingTabs} />
+        <CreateInvite />
+      </div>
 
       <DataTable
         columns={columns}

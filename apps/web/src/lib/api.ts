@@ -1,7 +1,7 @@
 import {
   DEFAULT_PAGE_INDEX,
   DEFAULT_PAGE_SIZE,
-} from '@/components/simple-data-table'
+} from '@/components/data-table'
 
 export type ListQueryParam = Partial<{
   page: number
