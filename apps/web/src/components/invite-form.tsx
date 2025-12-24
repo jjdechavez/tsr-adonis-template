@@ -19,7 +19,7 @@ export function InviteForm(props: InviteFormProps) {
       <Controller
         control={props.form.control}
         name="roleId"
-        render={({ field, fieldState, formState }) => {
+        render={({ field, fieldState }) => {
           return (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>Role</FieldLabel>

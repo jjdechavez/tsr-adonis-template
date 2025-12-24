@@ -167,7 +167,7 @@ export function DataTable<TData, TValue>({
 
       <Pagination className="mt-4">
         <Field orientation="horizontal" className="w-0">
-          <FieldLabel>Show</FieldLabel>
+          <FieldLabel htmlFor="show">Show</FieldLabel>
           <Select
             value={table.getState().pagination.pageSize.toString()}
             onValueChange={(e) => {
@@ -175,7 +175,7 @@ export function DataTable<TData, TValue>({
             }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Page" />
+              <SelectValue placeholder="Page" id="show" />
             </SelectTrigger>
             <SelectContent>
               {[10, 20, 30, 40, 50].map((pageSize) => (
