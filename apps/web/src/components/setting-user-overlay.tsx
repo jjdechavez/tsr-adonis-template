@@ -18,13 +18,11 @@ import { toast } from 'sonner'
 
 export function EditUser({
   user,
-
   open,
   onCallback,
   onToggleOpen,
 }: {
   user: User
-
   open: boolean
   onToggleOpen: () => void
   onCallback?: () => void

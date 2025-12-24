@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { PublicNotFound } from '@/components/public-not-found'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,8 +23,9 @@ const schema = z.object({
   password: z.string(),
 })
 
-export const Route = createFileRoute('/(auth)/login')({
+export const Route = createFileRoute('/(public)/login')({
   component: LoginComponent,
+  notFoundComponent: PublicNotFound,
 })
 
 function LoginComponent() {

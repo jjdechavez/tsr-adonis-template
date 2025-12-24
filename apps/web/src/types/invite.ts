@@ -6,3 +6,7 @@ export type Invite = InferResponseType<
 >['data'][number]
 
 export type InviteInput = InferRequestType<typeof tuyau.api.invites.$post>
+
+export type InviteCompleteInput = InferRequestType<
+  (typeof tuyau.api.invites)[':id']['complete']['$post']
+> & { password_confirmation: string }

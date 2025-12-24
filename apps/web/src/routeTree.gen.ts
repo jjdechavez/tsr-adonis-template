@@ -13,12 +13,13 @@ import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
-import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as publicLoginRouteImport } from './routes/(public)/login'
 import { Route as appSettingsRouteImport } from './routes/(app)/settings'
 import { Route as appDashboardRouteImport } from './routes/(app)/dashboard'
 import { Route as appSettingsIndexRouteImport } from './routes/(app)/settings.index'
 import { Route as appSettingsUsersRouteImport } from './routes/(app)/settings.users'
 import { Route as appSettingsInvitesRouteImport } from './routes/(app)/settings.invites'
+import { Route as publicInvitesInviteIdConfirmRouteImport } from './routes/(public)/invites.$inviteId.confirm'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
@@ -39,8 +40,8 @@ const DemoTableRoute = DemoTableRouteImport.update({
   path: '/demo/table',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authLoginRoute = authLoginRouteImport.update({
-  id: '/(auth)/login',
+const publicLoginRoute = publicLoginRouteImport.update({
+  id: '/(public)/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -69,27 +70,35 @@ const appSettingsInvitesRoute = appSettingsInvitesRouteImport.update({
   path: '/invites',
   getParentRoute: () => appSettingsRoute,
 } as any)
+const publicInvitesInviteIdConfirmRoute =
+  publicInvitesInviteIdConfirmRouteImport.update({
+    id: '/(public)/invites/$inviteId/confirm',
+    path: '/invites/$inviteId/confirm',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof appDashboardRoute
   '/settings': typeof appSettingsRouteWithChildren
-  '/login': typeof authLoginRoute
+  '/login': typeof publicLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/settings/invites': typeof appSettingsInvitesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings/': typeof appSettingsIndexRoute
+  '/invites/$inviteId/confirm': typeof publicInvitesInviteIdConfirmRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof appDashboardRoute
-  '/login': typeof authLoginRoute
+  '/login': typeof publicLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/settings/invites': typeof appSettingsInvitesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings': typeof appSettingsIndexRoute
+  '/invites/$inviteId/confirm': typeof publicInvitesInviteIdConfirmRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,12 +106,13 @@ export interface FileRoutesById {
   '/(app)': typeof appRouteRouteWithChildren
   '/(app)/dashboard': typeof appDashboardRoute
   '/(app)/settings': typeof appSettingsRouteWithChildren
-  '/(auth)/login': typeof authLoginRoute
+  '/(public)/login': typeof publicLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/(app)/settings/invites': typeof appSettingsInvitesRoute
   '/(app)/settings/users': typeof appSettingsUsersRoute
   '/(app)/settings/': typeof appSettingsIndexRoute
+  '/(public)/invites/$inviteId/confirm': typeof publicInvitesInviteIdConfirmRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/settings/invites'
     | '/settings/users'
     | '/settings/'
+    | '/invites/$inviteId/confirm'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -126,26 +137,29 @@ export interface FileRouteTypes {
     | '/settings/invites'
     | '/settings/users'
     | '/settings'
+    | '/invites/$inviteId/confirm'
   id:
     | '__root__'
     | '/'
     | '/(app)'
     | '/(app)/dashboard'
     | '/(app)/settings'
-    | '/(auth)/login'
+    | '/(public)/login'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/(app)/settings/invites'
     | '/(app)/settings/users'
     | '/(app)/settings/'
+    | '/(public)/invites/$inviteId/confirm'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   appRouteRoute: typeof appRouteRouteWithChildren
-  authLoginRoute: typeof authLoginRoute
+  publicLoginRoute: typeof publicLoginRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  publicInvitesInviteIdConfirmRoute: typeof publicInvitesInviteIdConfirmRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,11 +192,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTableRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/login': {
-      id: '/(auth)/login'
+    '/(public)/login': {
+      id: '/(public)/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof authLoginRouteImport
+      preLoaderRoute: typeof publicLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(app)/settings': {
@@ -220,6 +234,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appSettingsInvitesRouteImport
       parentRoute: typeof appSettingsRoute
     }
+    '/(public)/invites/$inviteId/confirm': {
+      id: '/(public)/invites/$inviteId/confirm'
+      path: '/invites/$inviteId/confirm'
+      fullPath: '/invites/$inviteId/confirm'
+      preLoaderRoute: typeof publicInvitesInviteIdConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -256,9 +277,10 @@ const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   appRouteRoute: appRouteRouteWithChildren,
-  authLoginRoute: authLoginRoute,
+  publicLoginRoute: publicLoginRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  publicInvitesInviteIdConfirmRoute: publicInvitesInviteIdConfirmRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
