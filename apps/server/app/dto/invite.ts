@@ -10,9 +10,9 @@ export class InviteDto {
       createdAt: this.invite.createdAt.toString(),
       updatedAt: this.invite.updatedAt?.toString(),
       roleId: this.invite.roleId,
-      role: this.invite.role?.name,
+      role: this.invite.role?.name || null,
       invitedById: this.invite.invitedById,
-      invitedBy: this.invite.invitedBy.email,
+      invitedBy: this.invite?.invitedBy?.email || null,
     }
   }
 }

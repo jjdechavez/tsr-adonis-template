@@ -36,8 +36,8 @@ type ApiUsersIdPut = {
   response: MakeTuyauResponse<import('../app/controllers/users_controller.ts').default['update'], true>
 }
 type ApiRolesGetHead = {
-  request: unknown
-  response: MakeTuyauResponse<import('../app/controllers/roles_controller.ts').default['index'], false>
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/role.ts')['roleListValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/roles_controller.ts').default['index'], true>
 }
 type ApiInvitesPost = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/invite.ts')['createInviteValidator']>>
