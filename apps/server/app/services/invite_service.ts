@@ -85,6 +85,7 @@ export class InviteService {
     await User.create({
       ...payload,
       roleId: invite.roleId,
+      email: invite.email,
     })
 
     invite.status = 'accepted'

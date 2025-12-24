@@ -19,6 +19,8 @@ const RolesController = () => import('#controllers/roles_controller')
 router.get('/health', [HealthChecksController])
 router.post('/api/session', [SessionController, 'store'])
 
+router.get('/api/invites/:id', [InvitesController, 'show'])
+router.post('/api/invites/:id/complete', [InvitesController, 'complete'])
 router.get('/invites/:id/confirm', [InvitesController, 'confirm']).as('invites.confirm')
 
 router

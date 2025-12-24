@@ -98,6 +98,6 @@ export default class InvitesController {
       return response.notFound({ message: result.message })
     }
 
-    return response.ok(new InviteDto(result.data).toJson())
+    return new InviteDto(result.data).toJson()
   }
 }

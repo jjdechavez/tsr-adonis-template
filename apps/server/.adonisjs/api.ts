@@ -15,6 +15,14 @@ type ApiSessionPost = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/session.ts')['sessionStoreValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/session_controller.ts').default['store'], true>
 }
+type ApiInvitesIdGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['show'], false>
+}
+type ApiInvitesIdCompletePost = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/invite.ts')['completeInviteValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['complete'], true>
+}
 type InvitesIdConfirmGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['confirm'], false>
@@ -71,6 +79,31 @@ export interface ApiDefinition {
       '$get': ApiSessionGetHead;
       '$head': ApiSessionGetHead;
     };
+    'invites': {
+      ':id': {
+        '$url': {
+        };
+        '$get': ApiInvitesIdGetHead;
+        '$head': ApiInvitesIdGetHead;
+        'complete': {
+          '$url': {
+          };
+          '$post': ApiInvitesIdCompletePost;
+        };
+        '$put': ApiInvitesIdPut;
+        'generate': {
+          '$url': {
+          };
+          '$get': ApiInvitesIdGenerateGetHead;
+          '$head': ApiInvitesIdGenerateGetHead;
+        };
+      };
+      '$url': {
+      };
+      '$post': ApiInvitesPost;
+      '$get': ApiInvitesGetHead;
+      '$head': ApiInvitesGetHead;
+    };
     'users': {
       '$url': {
       };
@@ -87,24 +120,6 @@ export interface ApiDefinition {
       };
       '$get': ApiRolesGetHead;
       '$head': ApiRolesGetHead;
-    };
-    'invites': {
-      '$url': {
-      };
-      '$post': ApiInvitesPost;
-      '$get': ApiInvitesGetHead;
-      '$head': ApiInvitesGetHead;
-      ':id': {
-        '$url': {
-        };
-        '$put': ApiInvitesIdPut;
-        'generate': {
-          '$url': {
-          };
-          '$get': ApiInvitesIdGenerateGetHead;
-          '$head': ApiInvitesIdGenerateGetHead;
-        };
-      };
     };
   };
   'invites': {
