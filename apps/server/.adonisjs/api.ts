@@ -35,6 +35,10 @@ type ApiUsersIdPut = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/user.ts')['updateUserValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/users_controller.ts').default['update'], true>
 }
+type ApiRolesGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/roles_controller.ts').default['index'], false>
+}
 type ApiInvitesPost = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/invite.ts')['createInviteValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['store'], true>
@@ -77,6 +81,12 @@ export interface ApiDefinition {
         };
         '$put': ApiUsersIdPut;
       };
+    };
+    'roles': {
+      '$url': {
+      };
+      '$get': ApiRolesGetHead;
+      '$head': ApiRolesGetHead;
     };
     'invites': {
       '$url': {

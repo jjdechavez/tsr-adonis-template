@@ -14,6 +14,7 @@ const SessionController = () => import('#controllers/session_controller')
 const HealthChecksController = () => import('#controllers/health_checks_controller')
 const UsersController = () => import('#controllers/users_controller')
 const InvitesController = () => import('#controllers/invites_controller')
+const RolesController = () => import('#controllers/roles_controller')
 
 router.get('/health', [HealthChecksController])
 router.post('/api/session', [SessionController, 'store'])
@@ -35,6 +36,12 @@ router
         router.put('/:id', [UsersController, 'update'])
       })
       .prefix('/users')
+
+    router
+      .group(() => {
+        router.get('/', [RolesController, 'index'])
+      })
+      .prefix('/roles')
 
     router
       .group(() => {
