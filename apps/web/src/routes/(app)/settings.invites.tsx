@@ -26,7 +26,11 @@ import {
 import { MoreHorizontal } from 'lucide-react'
 import { userSettingTabs } from './settings.users'
 import { DEFAULT_LIST_META } from '@/lib/api'
-import { CreateInvite, EditInvite } from '@/components/setting-invite-overlay'
+import {
+  CopyInviteLinkAction,
+  CreateInvite,
+  EditInvite,
+} from '@/components/setting-invite-overlay'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/(app)/settings/invites')({
@@ -80,6 +84,7 @@ const columns: ColumnDef<Invite>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <CopyInviteLinkAction inviteId={data.id.toString()} />
               <DropdownMenuItem
                 onClick={() => table.options.meta?.setEdit?.(data)}
               >

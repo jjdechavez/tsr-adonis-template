@@ -17,6 +17,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { tuyau } from '@/main'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
+import { tuyauClient } from '@/lib/tuyau'
+import { DropdownMenuItem } from './ui/dropdown-menu'
 
 export function CreateInvite() {
   const [open, setOpen] = useState(false)
@@ -157,5 +160,38 @@ export function EditInvite({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  )
+}
+
+export function CopyInviteLinkAction({ inviteId }: { inviteId: string }) {
+  const { copyToClipboard } = useCopyToClipboard()
+
+  const generateLinkMutation = useMutation({
+    mutationFn: async () => {
+      const response = await tuyauClient.api
+        .invites({ id: inviteId })
+        .generate.$get()
+      if (!response.data?.link) throw new Error('No link generated')
+      return response.data.link
+    },
+    onSuccess: (link) => {
+      copyToClipboard(link)
+      toast.success('Link copied to clipboard')
+    },
+    onError: () => {
+      toast.error('Failed to generate invite link')
+    },
+  })
+
+  return (
+    <DropdownMenuItem
+      disabled={generateLinkMutation.isPending}
+      onSelect={(e) => {
+        e.preventDefault()
+        generateLinkMutation.mutate()
+      }}
+    >
+      {generateLinkMutation.isPending ? 'Generating...' : 'Copy Link'}
+    </DropdownMenuItem>
   )
 }
