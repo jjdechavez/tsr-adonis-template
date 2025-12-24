@@ -22,7 +22,6 @@ import {
   useReactTable,
   type ColumnDef,
   type PaginationState,
-  type RowData,
 } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import { userSettingTabs } from './settings.users'
@@ -38,12 +37,6 @@ export const Route = createFileRoute('/(app)/settings/invites')({
   validateSearch: () => ({}) as Partial<PaginationState>,
 })
 
-declare module '@tanstack/react-table' {
-  interface TableMeta<TData extends RowData> {
-    setEditInvite: (invite: TData) => void
-  }
-}
-
 const columns: ColumnDef<Invite>[] = [
   {
     header: 'Email',
@@ -52,7 +45,7 @@ const columns: ColumnDef<Invite>[] = [
       return (
         <Button
           variant="link"
-          onClick={() => table.options.meta?.setEditInvite(data)}
+          onClick={() => table.options.meta?.setEdit?.(data)}
         >
           {data.email}
         </Button>
@@ -88,7 +81,7 @@ const columns: ColumnDef<Invite>[] = [
             <DropdownMenuContent>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => table.options.meta?.setEditInvite(data)}
+                onClick={() => table.options.meta?.setEdit?.(data)}
               >
                 Edit
               </DropdownMenuItem>
@@ -139,7 +132,7 @@ function InviteSettings() {
       fuzzy: () => true,
     },
     meta: {
-      setEditInvite: (invite) => setSelectedInvite(invite),
+      setEdit: (invite) => setSelectedInvite(invite),
     },
   })
 

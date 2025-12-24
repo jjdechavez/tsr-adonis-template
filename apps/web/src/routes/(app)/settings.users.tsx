@@ -13,31 +13,20 @@ import {
   DEFAULT_PAGE_INDEX,
   DEFAULT_PAGE_SIZE,
 } from '@/components/data-table'
-import { useIsMobile } from '@/hooks/use-mobile'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
-import { UserForm } from '@/components/user-form'
-import { useForm } from 'react-hook-form'
-import type { User, UserInput } from '@/types/user'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
+import type { User } from '@/types/user'
+import { useQuery } from '@tanstack/react-query'
 import { SettingTab } from '@/components/setting-tab'
+import { useState } from 'react'
+import { EditUser } from '@/components/setting-user-overlay'
 
 export const Route = createFileRoute('/(app)/settings/users')({
   component: UserSettings,
@@ -49,80 +38,19 @@ export const Route = createFileRoute('/(app)/settings/users')({
   validateSearch: () => ({}) as Partial<PaginationState>,
 })
 
-function EditUser({ user }: { user: User }) {
-  const queryClient = useQueryClient()
-  const isMobile = useIsMobile()
-  const form = useForm<UserInput>({
-    defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-    },
-  })
-
-  const updateUserMutation = useMutation(
-    tuyau.api.users({ id: user.id }).$put.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: tuyau.api.users.$get.pathKey(),
-        })
-      },
-    }),
-  )
-
-  const onSubmit = async (payload: UserInput) => {
-    toast.promise(
-      async () => await updateUserMutation.mutateAsync({ payload }),
-      {
-        loading: 'Updating user...',
-        success: () => `Updated successfully`,
-        error: () => 'Failed to update user',
-      },
-    )
-  }
-
-  return (
-    <Drawer
-      direction={isMobile ? 'bottom' : 'right'}
-      onOpenChange={() =>
-        form.reset({
-          firstName: user.firstName,
-          lastName: user.lastName,
-        })
-      }
-    >
-      <DrawerTrigger asChild>
-        <Button variant="link" className="text-foreground w-fit px-0 text-left">
-          {user.name}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="gap-1">
-          <DrawerTitle>Edit User</DrawerTitle>
-          <DrawerDescription>User personal information</DrawerDescription>
-        </DrawerHeader>
-
-        <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-          <UserForm form={form} onSubmit={onSubmit} />
-        </div>
-        <DrawerFooter>
-          <Button type="submit" form="user-form">
-            Update
-          </Button>
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  )
-}
-
 const columns: ColumnDef<User>[] = [
   {
     header: 'Name',
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const data = row.original
-      return <EditUser user={data} />
+      return (
+        <Button
+          variant="link"
+          onClick={() => table.options.meta?.setEdit?.(data)}
+        >
+          {data.firstName} {data.lastName}
+        </Button>
+      )
     },
   },
   {
@@ -136,7 +64,8 @@ const columns: ColumnDef<User>[] = [
   {
     id: 'actions',
     enableHiding: false,
-    cell: ({}) => {
+    cell: ({ row, table }) => {
+      const data = row.original
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -147,6 +76,11 @@ const columns: ColumnDef<User>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => table.options.meta?.setEdit?.(data)}
+            >
+              Edit
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -167,6 +101,7 @@ export const userSettingTabs = [
 
 function UserSettings() {
   const { filters, setFilters } = useFilters(Route.id)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   const query = {
     page: filters.pageIndex || DEFAULT_PAGE_INDEX,
@@ -203,6 +138,9 @@ function UserSettings() {
     filterFns: {
       fuzzy: () => true,
     },
+    meta: {
+      setEdit: (user) => setSelectedUser(user),
+    },
   })
 
   return (
@@ -216,6 +154,16 @@ function UserSettings() {
         table={table}
         dataStatus={status}
       />
+
+      {!selectedUser ? null : (
+        <EditUser
+          key={selectedUser.id}
+          open={!!selectedUser}
+          user={selectedUser}
+          onToggleOpen={() => setSelectedUser(null)}
+          onCallback={() => setSelectedUser(null)}
+        />
+      )}
     </div>
   )
 }
