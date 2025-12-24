@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
@@ -21,11 +22,13 @@ import {
   useReactTable,
   type ColumnDef,
   type PaginationState,
+  type RowData,
 } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import { userSettingTabs } from './settings.users'
 import { DEFAULT_LIST_META } from '@/lib/api'
-import { CreateInvite } from '@/components/setting-invite-overlay'
+import { CreateInvite, EditInvite } from '@/components/setting-invite-overlay'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/(app)/settings/invites')({
   component: InviteSettings,
@@ -35,14 +38,34 @@ export const Route = createFileRoute('/(app)/settings/invites')({
   validateSearch: () => ({}) as Partial<PaginationState>,
 })
 
+declare module '@tanstack/react-table' {
+  interface TableMeta<TData extends RowData> {
+    setEditInvite: (invite: TData) => void
+  }
+}
+
 const columns: ColumnDef<Invite>[] = [
   {
     header: 'Email',
-    accessorKey: 'email',
+    cell: ({ row, table }) => {
+      const data = row.original
+      return (
+        <Button
+          variant="link"
+          onClick={() => table.options.meta?.setEditInvite(data)}
+        >
+          {data.email}
+        </Button>
+      )
+    },
   },
   {
     header: 'Role',
     accessorKey: 'role',
+  },
+  {
+    header: 'Status',
+    accessorKey: 'status',
   },
   {
     header: 'Invited By',
@@ -51,19 +74,27 @@ const columns: ColumnDef<Invite>[] = [
   {
     id: 'actions',
     enableHiding: false,
-    cell: ({}) => {
+    cell: ({ row, table }) => {
+      const data = row.original
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={'ghost'}>
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={'ghost'}>
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => table.options.meta?.setEditInvite(data)}
+              >
+                Edit
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )
     },
   },
@@ -71,6 +102,7 @@ const columns: ColumnDef<Invite>[] = [
 
 function InviteSettings() {
   const { filters, setFilters } = useFilters(Route.id)
+  const [selectedInvite, setSelectedInvite] = useState<Invite | null>(null)
   const query = {
     page: filters.pageIndex || DEFAULT_PAGE_INDEX,
     limit: filters.pageSize || DEFAULT_PAGE_SIZE,
@@ -106,6 +138,9 @@ function InviteSettings() {
     filterFns: {
       fuzzy: () => true,
     },
+    meta: {
+      setEditInvite: (invite) => setSelectedInvite(invite),
+    },
   })
 
   return (
@@ -122,6 +157,16 @@ function InviteSettings() {
         table={table}
         dataStatus={status}
       />
+
+      {!selectedInvite ? null : (
+        <EditInvite
+          key={selectedInvite.id}
+          open={!!selectedInvite}
+          invite={selectedInvite}
+          onToggleOpen={() => setSelectedInvite(null)}
+          onCallback={() => setSelectedInvite(null)}
+        />
+      )}
     </div>
   )
 }
