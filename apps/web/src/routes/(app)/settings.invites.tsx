@@ -15,7 +15,7 @@ import {
 import { useFilters } from '@/hooks/use-filters'
 import { tuyau } from '@/main'
 import type { Invite } from '@/types/invite'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import {
   getCoreRowModel,
@@ -32,12 +32,19 @@ import {
   EditInvite,
 } from '@/components/setting-invite-overlay'
 import { useState } from 'react'
+import { SettingPendingComponent } from '@/components/pending-component'
 
 export const Route = createFileRoute('/(app)/settings/invites')({
-  component: InviteSettings,
-  loader: () => {
-    return { crumb: 'Invites' }
+  loader: ({ context }) => {
+    return {
+      crumb: 'Invites',
+      ...context.queryClient.ensureQueryData(
+        context.tuyau.api.invites.$get.queryOptions(),
+      ),
+    }
   },
+  pendingComponent: SettingPendingComponent,
+  component: InviteSettings,
   validateSearch: () => ({}) as Partial<PaginationState>,
 })
 
@@ -106,7 +113,7 @@ function InviteSettings() {
     limit: filters.pageSize || DEFAULT_PAGE_SIZE,
   }
 
-  const { status, data } = useQuery(
+  const { status, data } = useSuspenseQuery(
     tuyau.api.invites.$get.queryOptions({ payload: query }),
   )
 
