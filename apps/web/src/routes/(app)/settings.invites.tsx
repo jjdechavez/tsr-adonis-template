@@ -93,12 +93,18 @@ const columns: ColumnDef<Invite>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <CopyInviteLinkAction inviteId={data.id.toString()} />
-              <DropdownMenuItem
-                onClick={() => table.options.meta?.setEdit?.(data)}
-              >
-                Edit
-              </DropdownMenuItem>
+              {data.status !== 'accepted' ? (
+                <>
+                  <CopyInviteLinkAction inviteId={data.id.toString()} />
+                  <DropdownMenuItem
+                    onClick={() => table.options.meta?.setEdit?.(data)}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem>No Available Actions</DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </>

@@ -1,9 +1,7 @@
 import { AppSidebar } from '@/components/app-sidebar'
 import { SiteHeader } from '@/components/site-header'
-import {
-  SidebarInset,
-  SidebarProvider,
-} from '@/components/ui/sidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { Spinner } from '@/components/ui/spinner'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(app)')({
@@ -19,6 +17,11 @@ export const Route = createFileRoute('/(app)')({
       })
     }
   },
+  pendingComponent: () => (
+    <div className="flex items-center gap-4">
+      <Spinner />
+    </div>
+  ),
   component: AuthenticatedLayout,
 })
 
