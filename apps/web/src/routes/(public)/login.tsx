@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router'
 import { PublicNotFound } from '@/components/public-not-found'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -24,13 +24,20 @@ const schema = z.object({
 })
 
 export const Route = createFileRoute('/(public)/login')({
+  beforeLoad: ({ context }) => {
+    if (context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/dashboard',
+      })
+    }
+  },
   component: LoginComponent,
   notFoundComponent: PublicNotFound,
 })
 
 function LoginComponent() {
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { login, isAuthenticated } = useAuth()
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -41,10 +48,15 @@ function LoginComponent() {
 
   const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate({ to: '/dashboard' })
+    }
+  }, [isAuthenticated, navigate])
+
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
       await login(data.email, data.password)
-      navigate({ to: '/dashboard' })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     }

@@ -8,6 +8,7 @@ import {
 import { tuyauClient } from './tuyau'
 import { tuyau } from '../main'
 import { useMutation } from '@tanstack/react-query'
+import { redirect } from '@tanstack/react-router'
 
 export interface User {
   id: number
@@ -37,7 +38,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loginMutation = useMutation(tuyau.api.session.$post.mutationOptions())
   const logoutMutation = useMutation(
-    tuyau.api.session.$delete.mutationOptions(),
+    tuyau.api.session.$delete.mutationOptions({
+      onError: (e) => console.log('mutation error: ', e),
+    }),
   )
 
   const getToken = (): string | null => {
@@ -93,11 +96,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     try {
       await logoutMutation.mutateAsync({})
-    } catch (error) {
-      console.error('Logout error:', error)
-    } finally {
       setToken(null)
       setUser(null)
+    } catch (error) {
+      console.error('Logout error:', error)
     }
   }
 
