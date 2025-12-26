@@ -11,8 +11,9 @@ export default class SessionsController {
     return await auth.use('api').createToken(user, ['*'], { expiresIn: '7 days' })
   }
 
-  async destroy({ auth }: HttpContext) {
+  async destroy({ auth, response }: HttpContext) {
     await auth.use('api').invalidateToken()
+    return response.noContent()
   }
 
   async me({ auth }: HttpContext) {

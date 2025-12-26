@@ -8,16 +8,9 @@ import {
 import { tuyauClient } from './tuyau'
 import { tuyau } from '../main'
 import { useMutation } from '@tanstack/react-query'
-import { redirect } from '@tanstack/react-router'
+import type { InferResponseType } from '@tuyau/react-query'
 
-export interface User {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  createdAt: string
-  updatedAt: string | null
-}
+export type User = InferResponseType<typeof tuyau.api.session.$get>
 
 const TOKEN_STORAGE_KEY = 'auth_token'
 

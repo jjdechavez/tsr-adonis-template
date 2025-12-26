@@ -22,11 +22,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { useSession } from '@/hooks/api/session'
+import { useNavigate } from '@tanstack/react-router'
+import { useAuth } from '@/lib/auth'
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-  const { data } = useSession()
+  const navigate = useNavigate()
+  const { logout, user: data } = useAuth()
 
   const user = {
     name: data?.name,
@@ -81,17 +83,14 @@ export function NavUser() {
                 <IconUserCircle />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await logout()
+                navigate({ to: '/login' })
+              }}
+            >
               <IconLogout />
               Log out
             </DropdownMenuItem>
