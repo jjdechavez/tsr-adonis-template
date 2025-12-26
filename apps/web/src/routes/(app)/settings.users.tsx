@@ -1,6 +1,6 @@
 import { useFilters } from '@/hooks/use-filters'
 import { DEFAULT_LIST_META } from '@/lib/api'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import {
   getCoreRowModel,
   useReactTable,
@@ -23,14 +23,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
 import type { User } from '@/types/user'
-import {
-  useQueryErrorResetBoundary,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { SettingTab } from '@/components/setting-tab'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { EditUser } from '@/components/setting-user-overlay'
 import { SettingPendingComponent } from '@/components/pending-component'
+import { GenericErrorComponent } from '@/components/error-component'
 
 export const Route = createFileRoute('/(app)/settings/users')({
   loader: ({ context }) => {
@@ -44,29 +42,7 @@ export const Route = createFileRoute('/(app)/settings/users')({
   validateSearch: () => ({}) as Partial<PaginationState>,
   component: UserSettings,
   pendingComponent: SettingPendingComponent,
-  errorComponent: ({ error }) => {
-    const router = useRouter()
-    const queryErrorResetBoundary = useQueryErrorResetBoundary()
-
-    useEffect(() => {
-      // Reset the query error boundary
-      queryErrorResetBoundary.reset()
-    }, [queryErrorResetBoundary])
-
-    return (
-      <div>
-        {error.message}
-        <button
-          onClick={() => {
-            // Invalidate the route to reload the loader, and reset any router error boundaries
-            router.invalidate()
-          }}
-        >
-          retry
-        </button>
-      </div>
-    )
-  },
+  errorComponent: GenericErrorComponent,
 })
 
 const columns: ColumnDef<User>[] = [

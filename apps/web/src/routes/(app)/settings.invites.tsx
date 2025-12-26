@@ -33,6 +33,7 @@ import {
 } from '@/components/setting-invite-overlay'
 import { useState } from 'react'
 import { SettingPendingComponent } from '@/components/pending-component'
+import { GenericErrorComponent } from '@/components/error-component'
 
 export const Route = createFileRoute('/(app)/settings/invites')({
   loader: ({ context }) => {
@@ -43,9 +44,10 @@ export const Route = createFileRoute('/(app)/settings/invites')({
       ),
     }
   },
+  validateSearch: () => ({}) as Partial<PaginationState>,
   pendingComponent: SettingPendingComponent,
   component: InviteSettings,
-  validateSearch: () => ({}) as Partial<PaginationState>,
+  errorComponent: GenericErrorComponent,
 })
 
 const columns: ColumnDef<Invite>[] = [
