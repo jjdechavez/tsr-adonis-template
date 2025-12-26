@@ -7,6 +7,7 @@ import { useAuth } from '../lib/auth'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from '@/components/ui/sonner'
+import type { tuyau } from '@/main'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -15,6 +16,7 @@ interface MyRouterContext {
     isAuthenticated: boolean
     isLoading: boolean
   }
+  tuyau: typeof tuyau
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

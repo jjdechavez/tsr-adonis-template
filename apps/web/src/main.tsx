@@ -27,6 +27,7 @@ const router = createRouter({
   context: {
     ...TanStackQueryProviderContext,
     auth: undefined!, // This will be set by the AuthProvider wrapper
+    tuyau,
   },
   defaultPreload: 'intent',
   scrollRestoration: true,
