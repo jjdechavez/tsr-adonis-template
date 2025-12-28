@@ -9,6 +9,8 @@ import { tuyauClient } from './tuyau'
 import { tuyau } from '../main'
 import { useMutation } from '@tanstack/react-query'
 import type { InferResponseType } from '@tuyau/react-query'
+import { toast } from 'sonner'
+import { TuyauHTTPError } from '@tuyau/client'
 
 export type User = InferResponseType<typeof tuyau.api.session.$get>
 
@@ -31,9 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loginMutation = useMutation(tuyau.api.session.$post.mutationOptions())
   const logoutMutation = useMutation(
-    tuyau.api.session.$delete.mutationOptions({
-      onError: (e) => console.log('mutation error: ', e),
-    }),
+    tuyau.api.session.$delete.mutationOptions({}),
   )
 
   const getToken = (): string | null => {
@@ -74,9 +74,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const login = async (email: string, password: string) => {
-    const response = await loginMutation.mutateAsync({
-      payload: { email, password },
-    })
+    const response = await loginMutation.mutateAsync(
+      {
+        payload: { email, password },
+      },
+      {
+        onError: (e) => {
+          if (e instanceof TuyauHTTPError) {
+            const value = e.value as { errors: Array<{ message: string }> }
+            toast.error(value.errors[0].message)
+          }
+        },
+      },
+    )
 
     if (!response?.token) {
       throw new Error('Invalid response from server: token not found')
