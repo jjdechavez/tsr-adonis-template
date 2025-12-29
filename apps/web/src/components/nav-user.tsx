@@ -79,7 +79,9 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => navigate({ to: '/settings/accounts' })}
+              >
                 <IconUserCircle />
                 Account
               </DropdownMenuItem>
