@@ -6,15 +6,18 @@ import {
   ItemTitle,
 } from '@/components/ui/item'
 import { Separator } from '@/components/ui/separator'
+import { useAuth } from '@/lib/auth'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { UsersIcon } from 'lucide-react'
+import { SettingsIcon, UsersIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/(app)/settings/')({
   component: SettingComponent,
 })
 
 function SettingComponent() {
-  Route.fullPath
+  const { user } = useAuth()
+  const isAdmin = user!.role === 'Admin'
+
   return (
     <div className="px-4 lg:px-6 space-y-4">
       <h1 className="font-bold text-xl text-foreground">Settings</h1>
@@ -22,14 +25,27 @@ function SettingComponent() {
       <Separator />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {isAdmin ? (
+          <Item variant="outline" asChild>
+            <Link to="/settings/users">
+              <ItemMedia variant="image">
+                <UsersIcon className="size-6" />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle>User</ItemTitle>
+                <ItemDescription>Manage users and invites</ItemDescription>
+              </ItemContent>
+            </Link>
+          </Item>
+        ) : null}
         <Item variant="outline" asChild>
-          <Link to="/settings/users">
+          <Link to="/settings/accounts">
             <ItemMedia variant="image">
-              <UsersIcon className="size-6" />
+              <SettingsIcon className="size-6" />
             </ItemMedia>
             <ItemContent>
-              <ItemTitle>User</ItemTitle>
-              <ItemDescription>Manage users and invites</ItemDescription>
+              <ItemTitle>Account</ItemTitle>
+              <ItemDescription>Manage account information</ItemDescription>
             </ItemContent>
           </Link>
         </Item>

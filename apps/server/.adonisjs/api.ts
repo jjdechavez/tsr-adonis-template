@@ -63,6 +63,10 @@ type ApiInvitesIdGenerateGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/invites_controller.ts').default['generateLink'], false>
 }
+type ApiAccountsPut = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/account.ts')['updateAccountValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/accounts_controller.ts').default['update'], true>
+}
 export interface ApiDefinition {
   'health': {
     '$url': {
@@ -120,6 +124,11 @@ export interface ApiDefinition {
       };
       '$get': ApiRolesGetHead;
       '$head': ApiRolesGetHead;
+    };
+    'accounts': {
+      '$url': {
+      };
+      '$put': ApiAccountsPut;
     };
   };
   'invites': {

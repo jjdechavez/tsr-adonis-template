@@ -19,6 +19,7 @@ import { Route as appDashboardRouteImport } from './routes/(app)/dashboard'
 import { Route as appSettingsIndexRouteImport } from './routes/(app)/settings.index'
 import { Route as appSettingsUsersRouteImport } from './routes/(app)/settings.users'
 import { Route as appSettingsInvitesRouteImport } from './routes/(app)/settings.invites'
+import { Route as appSettingsAccountsRouteImport } from './routes/(app)/settings.accounts'
 import { Route as publicInvitesInviteIdConfirmRouteImport } from './routes/(public)/invites.$inviteId.confirm'
 
 const appRouteRoute = appRouteRouteImport.update({
@@ -70,6 +71,11 @@ const appSettingsInvitesRoute = appSettingsInvitesRouteImport.update({
   path: '/invites',
   getParentRoute: () => appSettingsRoute,
 } as any)
+const appSettingsAccountsRoute = appSettingsAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => appSettingsRoute,
+} as any)
 const publicInvitesInviteIdConfirmRoute =
   publicInvitesInviteIdConfirmRouteImport.update({
     id: '/(public)/invites/$inviteId/confirm',
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof publicLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/settings/accounts': typeof appSettingsAccountsRoute
   '/settings/invites': typeof appSettingsInvitesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings/': typeof appSettingsIndexRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/login': typeof publicLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/settings/accounts': typeof appSettingsAccountsRoute
   '/settings/invites': typeof appSettingsInvitesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings': typeof appSettingsIndexRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/(public)/login': typeof publicLoginRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/(app)/settings/accounts': typeof appSettingsAccountsRoute
   '/(app)/settings/invites': typeof appSettingsInvitesRoute
   '/(app)/settings/users': typeof appSettingsUsersRoute
   '/(app)/settings/': typeof appSettingsIndexRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/settings/accounts'
     | '/settings/invites'
     | '/settings/users'
     | '/settings/'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/settings/accounts'
     | '/settings/invites'
     | '/settings/users'
     | '/settings'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/(public)/login'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/(app)/settings/accounts'
     | '/(app)/settings/invites'
     | '/(app)/settings/users'
     | '/(app)/settings/'
@@ -234,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appSettingsInvitesRouteImport
       parentRoute: typeof appSettingsRoute
     }
+    '/(app)/settings/accounts': {
+      id: '/(app)/settings/accounts'
+      path: '/accounts'
+      fullPath: '/settings/accounts'
+      preLoaderRoute: typeof appSettingsAccountsRouteImport
+      parentRoute: typeof appSettingsRoute
+    }
     '/(public)/invites/$inviteId/confirm': {
       id: '/(public)/invites/$inviteId/confirm'
       path: '/invites/$inviteId/confirm'
@@ -245,12 +264,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface appSettingsRouteChildren {
+  appSettingsAccountsRoute: typeof appSettingsAccountsRoute
   appSettingsInvitesRoute: typeof appSettingsInvitesRoute
   appSettingsUsersRoute: typeof appSettingsUsersRoute
   appSettingsIndexRoute: typeof appSettingsIndexRoute
 }
 
 const appSettingsRouteChildren: appSettingsRouteChildren = {
+  appSettingsAccountsRoute: appSettingsAccountsRoute,
   appSettingsInvitesRoute: appSettingsInvitesRoute,
   appSettingsUsersRoute: appSettingsUsersRoute,
   appSettingsIndexRoute: appSettingsIndexRoute,

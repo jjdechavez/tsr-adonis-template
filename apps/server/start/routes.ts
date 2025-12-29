@@ -15,6 +15,7 @@ const HealthChecksController = () => import('#controllers/health_checks_controll
 const UsersController = () => import('#controllers/users_controller')
 const InvitesController = () => import('#controllers/invites_controller')
 const RolesController = () => import('#controllers/roles_controller')
+const AccountsController = () => import('#controllers/accounts_controller')
 
 router.get('/health', [HealthChecksController])
 router.post('/api/session', [SessionController, 'store'])
@@ -53,6 +54,12 @@ router
         router.get('/:id/generate', [InvitesController, 'generateLink'])
       })
       .prefix('/invites')
+
+    router
+      .group(() => {
+        router.put('/', [AccountsController, 'update'])
+      })
+      .prefix('/accounts')
   })
   .prefix('/api')
   .middleware([middleware.auth({ guards: ['api'] })])
