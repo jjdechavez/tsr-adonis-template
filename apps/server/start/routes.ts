@@ -63,4 +63,4 @@ router
       .prefix('/accounts')
   })
   .prefix('/api')
-  .middleware([middleware.auth({ guards: ['api'] })])
+  .middleware([middleware.auth({ guards: ['api'] }), middleware.bouncer()])
