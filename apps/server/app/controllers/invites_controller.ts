@@ -1,5 +1,6 @@
 import { InviteDto } from '#dto/invite'
 import { PaginateDto } from '#dto/paginate'
+import InvitePolicy from '#policies/invite_policy'
 import { InviteService } from '#services/invite_service'
 import env from '#start/env'
 import {
@@ -15,13 +16,20 @@ import router from '@adonisjs/core/services/router'
 export default class InvitesController {
   constructor(protected inviteService: InviteService) {}
 
-  async store({ request, auth, response }: HttpContext) {
+  async store({ request, auth, response, bouncer }: HttpContext) {
+    if (await bouncer.with(InvitePolicy).denies('isAdmin')) {
+      return response.forbidden({ message: 'Cannot create a invite' })
+    }
+
     const payload = await request.validateUsing(createInviteValidator)
     const created = await this.inviteService.create({ ...payload, invitedById: auth!.user!.id })
     return response.created(new InviteDto(created!).toJson())
   }
 
-  async index({ request }: HttpContext) {
+  async index({ request, bouncer, response }: HttpContext) {
+    if (await bouncer.with(InvitePolicy).denies('isAdmin')) {
+      return response.forbidden({ message: 'Cannot list invite' })
+    }
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
     const qs = request.qs()
@@ -33,7 +41,10 @@ export default class InvitesController {
     }
   }
 
-  generateLink({ params, request }: HttpContext) {
+  async generateLink({ params, request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(InvitePolicy).denies('isAdmin')) {
+      return response.forbidden({ message: 'Cannot generate invite link' })
+    }
     const host = request.hostname()! || env.get('HOST')
     const beURL =
       env.get('NODE_ENV') !== 'production'
@@ -88,7 +99,11 @@ export default class InvitesController {
     return response.created()
   }
 
-  async update({ request, params, response }: HttpContext) {
+  async update({ request, params, response, bouncer }: HttpContext) {
+    if (await bouncer.with(InvitePolicy).denies('isAdmin')) {
+      return response.forbidden({ message: 'Cannot update invite' })
+    }
+
     const payload = await request.validateUsing(updateInviteValidator, {
       meta: { inviteId: params.id },
     })

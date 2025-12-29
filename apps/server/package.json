@@ -53,7 +53,9 @@
     "typescript": "~5.8"
   },
   "dependencies": {
+    "@acme/shared": "workspace:*",
     "@adonisjs/auth": "^9.4.0",
+    "@adonisjs/bouncer": "^3.1.6",
     "@adonisjs/core": "^6.18.0",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.6.1",
@@ -61,11 +63,13 @@
     "@vinejs/vine": "^3.0.1",
     "luxon": "^3.7.2",
     "pg": "^8.16.3",
-    "reflect-metadata": "^0.2.2",
-    "@acme/shared": "workspace:*"
+    "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
-    "boundaries": ["./app/controllers/**/*.ts", "./app/middleware/*.ts"]
+    "boundaries": [
+      "./app/controllers/**/*.ts",
+      "./app/middleware/*.ts"
+    ]
   },
   "prettier": "@adonisjs/prettier-config",
   "exports": {
