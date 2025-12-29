@@ -58,6 +58,7 @@ router
     router
       .group(() => {
         router.put('/', [AccountsController, 'update'])
+        router.post('/passwords', [AccountsController, 'changePassword'])
       })
       .prefix('/accounts')
   })
