@@ -33,6 +33,7 @@ export function EditUser({
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
+      roleId: user.roleId,
     },
   })
 
