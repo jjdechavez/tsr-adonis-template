@@ -26,10 +26,9 @@ export default class InvitesController {
     return response.created(new InviteDto(created!).toJson())
   }
 
-  async index({ request, bouncer, response }: HttpContext) {
-    if (await bouncer.with(InvitePolicy).denies('isAdmin')) {
-      return response.forbidden({ message: 'Cannot list invite' })
-    }
+  async index({ request, bouncer }: HttpContext) {
+    await bouncer.with(InvitePolicy).authorize('isAdmin')
+
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
     const qs = request.qs()
