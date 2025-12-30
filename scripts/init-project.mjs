@@ -43,7 +43,8 @@ const question = (query) =>
     if (json.dependencies) {
       // Remove old ref and add new one
       const oldKeys = Object.keys(json.dependencies).filter(
-        (k) => k.includes("/server") || k.includes("server"),
+        (k) =>
+          k.includes("/server") || k.includes("server") || k.includes("@acme"),
       );
       oldKeys.forEach((k) => delete json.dependencies[k]);
       json.dependencies[fullServerName] = "workspace:*";
@@ -77,7 +78,9 @@ const question = (query) =>
     );
   });
 
-  console.log(`\n✅ Renamed packages to ${fullServerName} and ${fullWebName}`);
+  console.log(
+    `\n✅ Renamed packages to ${fullServerName}, ${fullWebName}, and ${fullSharedName}`,
+  );
   console.log(`👉 Run 'pnpm install' to link the workspaces.`);
 
   rl.close();
