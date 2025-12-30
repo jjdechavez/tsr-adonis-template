@@ -12,6 +12,7 @@ const appPaths = {
   webPkg: "apps/web/package.json",
   rootPkg: "package.json",
   tuyauClient: "apps/web/src/lib/tuyau.ts",
+  sharedPkg: "apps/shared/package.json",
 };
 
 const question = (query) =>
@@ -27,6 +28,7 @@ const question = (query) =>
 
   const fullServerName = `${scopeName}/server`;
   const fullWebName = `${scopeName}/web`;
+  const fullSharedName = `${scopeName}/shared`;
 
   console.log(
     `\n⚙️  Configuring packages as: ${fullServerName} & ${fullWebName}...`,
@@ -50,6 +52,10 @@ const question = (query) =>
 
   updateJson(appPaths.rootPkg, (json) => {
     json.name = projectName;
+  });
+
+  updateJson(appPaths.sharedPkg, (json) => {
+    json.name = fullSharedName;
   });
 
   updateFileContent(appPaths.tuyauClient, (content) => {
