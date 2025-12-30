@@ -36,6 +36,13 @@ const question = (query) =>
 
   updateJson(appPaths.serverPkg, (json) => {
     json.name = fullServerName;
+    if (json.dependencies) {
+      const oldKeys = Object.keys(json.dependencies).filter((k) =>
+        k.includes("@acme/shared"),
+      );
+      oldKeys.forEach((k) => delete json.dependencies[k]);
+      json.dependencies[fullServerName] = "workspace:*";
+    }
   });
 
   updateJson(appPaths.webPkg, (json) => {
@@ -43,8 +50,7 @@ const question = (query) =>
     if (json.dependencies) {
       // Remove old ref and add new one
       const oldKeys = Object.keys(json.dependencies).filter(
-        (k) =>
-          k.includes("/server") || k.includes("server") || k.includes("@acme"),
+        (k) => k.includes("/server") || k.includes("server"),
       );
       oldKeys.forEach((k) => delete json.dependencies[k]);
       json.dependencies[fullServerName] = "workspace:*";
