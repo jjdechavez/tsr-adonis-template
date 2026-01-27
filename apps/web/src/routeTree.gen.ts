@@ -18,6 +18,7 @@ import { Route as appSettingsRouteImport } from './routes/(app)/settings'
 import { Route as appDashboardRouteImport } from './routes/(app)/dashboard'
 import { Route as appSettingsIndexRouteImport } from './routes/(app)/settings.index'
 import { Route as appSettingsUsersRouteImport } from './routes/(app)/settings.users'
+import { Route as appSettingsPreferencesRouteImport } from './routes/(app)/settings.preferences'
 import { Route as appSettingsInvitesRouteImport } from './routes/(app)/settings.invites'
 import { Route as appSettingsAccountsRouteImport } from './routes/(app)/settings.accounts'
 import { Route as publicInvitesInviteIdConfirmRouteImport } from './routes/(public)/invites.$inviteId.confirm'
@@ -66,6 +67,11 @@ const appSettingsUsersRoute = appSettingsUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => appSettingsRoute,
 } as any)
+const appSettingsPreferencesRoute = appSettingsPreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
+  getParentRoute: () => appSettingsRoute,
+} as any)
 const appSettingsInvitesRoute = appSettingsInvitesRouteImport.update({
   id: '/invites',
   path: '/invites',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/settings/accounts': typeof appSettingsAccountsRoute
   '/settings/invites': typeof appSettingsInvitesRoute
+  '/settings/preferences': typeof appSettingsPreferencesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings/': typeof appSettingsIndexRoute
   '/invites/$inviteId/confirm': typeof publicInvitesInviteIdConfirmRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/settings/accounts': typeof appSettingsAccountsRoute
   '/settings/invites': typeof appSettingsInvitesRoute
+  '/settings/preferences': typeof appSettingsPreferencesRoute
   '/settings/users': typeof appSettingsUsersRoute
   '/settings': typeof appSettingsIndexRoute
   '/invites/$inviteId/confirm': typeof publicInvitesInviteIdConfirmRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/(app)/settings/accounts': typeof appSettingsAccountsRoute
   '/(app)/settings/invites': typeof appSettingsInvitesRoute
+  '/(app)/settings/preferences': typeof appSettingsPreferencesRoute
   '/(app)/settings/users': typeof appSettingsUsersRoute
   '/(app)/settings/': typeof appSettingsIndexRoute
   '/(public)/invites/$inviteId/confirm': typeof publicInvitesInviteIdConfirmRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/settings/accounts'
     | '/settings/invites'
+    | '/settings/preferences'
     | '/settings/users'
     | '/settings/'
     | '/invites/$inviteId/confirm'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/settings/accounts'
     | '/settings/invites'
+    | '/settings/preferences'
     | '/settings/users'
     | '/settings'
     | '/invites/$inviteId/confirm'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/(app)/settings/accounts'
     | '/(app)/settings/invites'
+    | '/(app)/settings/preferences'
     | '/(app)/settings/users'
     | '/(app)/settings/'
     | '/(public)/invites/$inviteId/confirm'
@@ -239,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appSettingsUsersRouteImport
       parentRoute: typeof appSettingsRoute
     }
+    '/(app)/settings/preferences': {
+      id: '/(app)/settings/preferences'
+      path: '/preferences'
+      fullPath: '/settings/preferences'
+      preLoaderRoute: typeof appSettingsPreferencesRouteImport
+      parentRoute: typeof appSettingsRoute
+    }
     '/(app)/settings/invites': {
       id: '/(app)/settings/invites'
       path: '/invites'
@@ -266,6 +285,7 @@ declare module '@tanstack/react-router' {
 interface appSettingsRouteChildren {
   appSettingsAccountsRoute: typeof appSettingsAccountsRoute
   appSettingsInvitesRoute: typeof appSettingsInvitesRoute
+  appSettingsPreferencesRoute: typeof appSettingsPreferencesRoute
   appSettingsUsersRoute: typeof appSettingsUsersRoute
   appSettingsIndexRoute: typeof appSettingsIndexRoute
 }
@@ -273,6 +293,7 @@ interface appSettingsRouteChildren {
 const appSettingsRouteChildren: appSettingsRouteChildren = {
   appSettingsAccountsRoute: appSettingsAccountsRoute,
   appSettingsInvitesRoute: appSettingsInvitesRoute,
+  appSettingsPreferencesRoute: appSettingsPreferencesRoute,
   appSettingsUsersRoute: appSettingsUsersRoute,
   appSettingsIndexRoute: appSettingsIndexRoute,
 }

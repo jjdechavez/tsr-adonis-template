@@ -1,8 +1,6 @@
 import {
-  IconCreditCard,
   IconDotsVertical,
   IconLogout,
-  IconNotification,
   IconUserCircle,
 } from '@tabler/icons-react'
 
@@ -24,6 +22,7 @@ import {
 } from '@/components/ui/sidebar'
 import { useNavigate } from '@tanstack/react-router'
 import { useAuth } from '@/lib/auth'
+import { ThemeToggle } from './theme-toggle'
 
 export function NavUser() {
   const { isMobile } = useSidebar()
@@ -79,6 +78,12 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <div className="flex items-center justify-between w-full">
+                  <span>Theme</span>
+                  <ThemeToggle />
+                </div>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => navigate({ to: '/settings/accounts' })}
               >

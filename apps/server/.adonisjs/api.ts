@@ -71,6 +71,14 @@ type ApiAccountsPasswordsPost = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/account.ts')['changePasswordValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/accounts_controller.ts').default['changePassword'], true>
 }
+type ApiPreferencesGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/user_preferences_controller.ts').default['show'], false>
+}
+type ApiPreferencesPut = {
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/user.ts')['updateUserPreferenceValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/user_preferences_controller.ts').default['update'], true>
+}
 export interface ApiDefinition {
   'health': {
     '$url': {
@@ -138,6 +146,13 @@ export interface ApiDefinition {
         };
         '$post': ApiAccountsPasswordsPost;
       };
+    };
+    'preferences': {
+      '$url': {
+      };
+      '$get': ApiPreferencesGetHead;
+      '$head': ApiPreferencesGetHead;
+      '$put': ApiPreferencesPut;
     };
   };
   'invites': {
