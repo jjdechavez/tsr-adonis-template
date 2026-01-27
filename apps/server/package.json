@@ -30,7 +30,8 @@
     "#start/*": "./start/*.js",
     "#tests/*": "./tests/*.js",
     "#config/*": "./config/*.js",
-    "#dto/*": "./app/dto/*.js"
+    "#dto/*": "./app/dto/*.js",
+    "#dtos/*": "./app/dtos/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
@@ -54,6 +55,7 @@
   },
   "dependencies": {
     "@acme/shared": "workspace:*",
+    "@adocasts.com/dto": "^0.0.10",
     "@adonisjs/auth": "^9.4.0",
     "@adonisjs/bouncer": "^3.1.6",
     "@adonisjs/core": "^6.18.0",
@@ -66,10 +68,7 @@
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
-    "boundaries": [
-      "./app/controllers/**/*.ts",
-      "./app/middleware/*.ts"
-    ]
+    "boundaries": ["./app/controllers/**/*.ts", "./app/middleware/*.ts"]
   },
   "prettier": "@adonisjs/prettier-config",
   "exports": {

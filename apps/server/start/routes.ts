@@ -16,6 +16,7 @@ const UsersController = () => import('#controllers/users_controller')
 const InvitesController = () => import('#controllers/invites_controller')
 const RolesController = () => import('#controllers/roles_controller')
 const AccountsController = () => import('#controllers/accounts_controller')
+const UserPreferencesController = () => import('#controllers/user_preferences_controller')
 
 router.get('/health', [HealthChecksController])
 router.post('/api/session', [SessionController, 'store'])
@@ -61,6 +62,13 @@ router
         router.post('/passwords', [AccountsController, 'changePassword'])
       })
       .prefix('/accounts')
+
+    router
+      .group(() => {
+        router.get('/', [UserPreferencesController, 'show'])
+        router.put('/', [UserPreferencesController, 'update'])
+      })
+      .prefix('/preferences')
   })
   .prefix('/api')
   .middleware([middleware.auth({ guards: ['api'] }), middleware.bouncer()])
